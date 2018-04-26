@@ -6,8 +6,14 @@
           <input [(ngModel)]="person.name" placeholder="name">
         </label>
     </div>
+    <div>
+        <label>Birthday year:
+          <input [(ngModel)]="person.birth_year" placeholder="Birthday year">
+        </label>
+    </div>
   </div>
   <div>
     <button (click)="save()">Save</button>
     <button (click)="goBack()">Go Back</button>
   </div>
+  

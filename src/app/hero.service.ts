@@ -4,8 +4,7 @@ import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { PEOPLE } from './mock-people';
-import { Person } from './person';
+import { Person, GetPeopleResponse, defaultPeopleResponse } from './person';
 import { MessageService } from './message.service';
 
 const httpOptions = {
@@ -14,7 +13,7 @@ const httpOptions = {
 
 @Injectable()
 export class HeroService {
-  private heroesUrl = 'api/heroes';  // URL to web api
+  private heroesUrl = 'https://swapi.co/api/people';  // URL to web api
 
   constructor(
     private http: HttpClient,
@@ -26,11 +25,20 @@ export class HeroService {
     this.messageService.add('HeroService: ' + message);
   }
 
-  getHeros(): Observable<Person[]> {
-    return this.http.get<Person[]>(this.heroesUrl)
+  getHeros(): Observable<GetPeopleResponse> {
+    return this.http.get<GetPeopleResponse>(this.heroesUrl)
       .pipe(
         tap(() => this.log('fetched heros')),
-        catchError(this.handleError<Person[]>('getHeros', []))
+        map(
+          resp => ({
+            ...resp,
+            results: resp.results.map(
+              hero => ({
+                ...hero,
+                id: +hero.url.split('/').slice(-2)[0],
+              })),
+            })),
+        catchError(this.handleError<GetPeopleResponse>('getHeros', defaultPeopleResponse))
       );
   }
 

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Person } from '../person';
-import { PEOPLE } from '../mock-people';
+import { GetPeopleResponse } from '../person';
 import { HeroService } from '../hero.service';
 
 @Component({
@@ -9,7 +8,7 @@ import { HeroService } from '../hero.service';
   styleUrls: ['./people.component.css']
 })
 export class PeopleComponent implements OnInit {
-  people: Person[];
+  people: GetPeopleResponse;
 
   constructor(private heroService: HeroService) { }
 
